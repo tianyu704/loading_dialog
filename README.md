@@ -12,8 +12,9 @@ or
 
 ```
 dependencies:
-  git:
-    loading_dialog: ^0.0.1 #latest version
+  loading_dialog:
+    git:
+      url: "https://github.com/tianyu704/loading_dialog"
 ```
 ## Getting Started
 
