@@ -8,6 +8,13 @@ A flutter widget of loading dialog.Easy to use.
 dependencies:
   loading_dialog: ^0.0.1 #latest version
 ```
+or
+
+```
+dependencies:
+  git:
+    loading_dialog: ^0.0.1 #latest version
+```
 ## Getting Started
 
 Default
