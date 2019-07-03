@@ -60,11 +60,11 @@ class LoadingDialog {
 
   LoadingDialog({
     @required this.buildContext,
-    this.loadingView ,
+    this.loadingView,
     this.loadingMessage = "Loading...",
     this.backgroundColor = Colors.white,
     this.barrierColor = Colors.black54,
-    this.barrierDismissible = false,
+    this.barrierDismissible = true,
     this.style,
     this.size = 40,
     this.width = 120,
@@ -94,7 +94,7 @@ class LoadingDialog {
   void show() {
     if (!_isShowing) {
       _isShowing = true;
-      showDialog<dynamic>(
+      showLoadingDialog<dynamic>(
         context: buildContext,
         barrierDismissible: barrierDismissible,
         barrierColor: barrierColor,
@@ -112,21 +112,21 @@ class LoadingDialog {
               height: height,
               child: style == LoadingDialogStyle.horizontal
                   ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  _buildLoadingView(context),
-                  _buildTextView(),
-                ],
-              )
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        _buildLoadingView(context),
+                        _buildTextView(style),
+                      ],
+                    )
                   : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  _buildLoadingView(context),
-                  _buildTextView(),
-                ],
-              ),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        _buildLoadingView(context),
+                        _buildTextView(style),
+                      ],
+                    ),
             ),
           );
         },
@@ -139,16 +139,17 @@ class LoadingDialog {
     return SizedBox(
       width: size,
       height: size,
-      child: loadingView ??
-          CircularProgressIndicator(),
+      child: loadingView ?? CircularProgressIndicator(),
     );
   }
 
-  Widget _buildTextView() {
+  Widget _buildTextView(LoadingDialogStyle style) {
     return Offstage(
       offstage: loadingMessage == null,
       child: Padding(
-        padding: EdgeInsets.only(top: padding),
+        padding: (style == LoadingDialogStyle.vertical)
+            ? EdgeInsets.only(top: padding)
+            : EdgeInsets.only(left: padding),
         child: Text(
           loadingMessage ?? "",
           style: TextStyle(
@@ -226,8 +227,8 @@ class _Dialog extends StatelessWidget {
 
   // TODO(johnsonmh): Update default dialog border radius to 4.0 to match material spec.
   static const RoundedRectangleBorder _defaultDialogShape =
-  RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(2.0)));
+      RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(2.0)));
   static const double _defaultElevation = 24.0;
 
   @override
@@ -252,7 +253,7 @@ class _Dialog extends StatelessWidget {
                   dialogTheme.backgroundColor ??
                   Theme.of(context).dialogBackgroundColor,
               elevation:
-              elevation ?? dialogTheme.elevation ?? _defaultElevation,
+                  elevation ?? dialogTheme.elevation ?? _defaultElevation,
               shape: shape ?? dialogTheme.shape ?? _defaultDialogShape,
               type: MaterialType.card,
               child: child,
@@ -268,16 +269,16 @@ class _Dialog extends StatelessWidget {
 /// 修改了show方法
 /// 添加barrierColor改变透明背景的颜色
 ///
-Future<T> showDialog<T>({
+Future<T> showLoadingDialog<T>({
   @required
-  BuildContext context,
+      BuildContext context,
   bool barrierDismissible = true,
   Color barrierColor,
   @Deprecated(
       'Instead of using the "child" argument, return the child from a closure '
-          'provided to the "builder" argument. This will ensure that the BuildContext '
-          'is appropriate for widgets built in the dialog.')
-  Widget child,
+      'provided to the "builder" argument. This will ensure that the BuildContext '
+      'is appropriate for widgets built in the dialog.')
+      Widget child,
   WidgetBuilder builder,
 }) {
   assert(child == null || builder == null);
